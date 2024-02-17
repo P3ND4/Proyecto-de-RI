@@ -5,6 +5,11 @@ import os
 #metodos auxiliares
 from utils import elements_sort_dict
 
+#devuelve las recomendaciones con sus metadatas
+def recomend(epubs: list) -> dict:
+  books_read = extract_metadata(epubs, ['genres'])
+  return extract_metadata(books_recomended(books_read), ['title', 'creator', 'genres', 'date'])
+  
 #puntuacion de los libros que no ha leido el usuario
 def books_recomended(books_read: dict) -> list:
   data_unread = extract_metadata(books_unread(books_read), ['title', 'genres'])

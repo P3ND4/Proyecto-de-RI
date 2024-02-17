@@ -1,12 +1,6 @@
 #dependencias
 import shutil
 
-#guardar el toc leido en la linea donde leo content
-def parse_toc(toc: str):
-  parse = toc.split('/')
-  response = parse[1]
-  return response.split('"')[0]
-
 #guardar el nombre del epub dada la ruta completa
 def parse_epub(path: str):
   epub = path.split('/')
@@ -31,10 +25,11 @@ def elements_sort_dict(dict: dict) -> dict:
   for element in sorted_items:
     sort[element[0]] = element[1]
   
-  while i < 10 and i < len(sort):
-    for element in sort.keys():
-      result[element] = sort[element]
+  #toma los 10 primeros elementos
+  for element in sort.keys():
+    if i < 10 and i < len(sort):
+        result[element] = sort[element]
+        i +=1 
     
-    i +=1 
-    
-  return sort
+  return result
+

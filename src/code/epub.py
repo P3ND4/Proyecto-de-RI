@@ -1,6 +1,5 @@
 #dependencias
 import zipfile
-import os
 
 #metodos auxiliares
 from utils import parse_epub, rem_dir
@@ -61,5 +60,5 @@ def extract_metadata(epubs: list, tags: list) -> dict:
           if 'metadata' in line:
             metadata_stage = True
       
-  rem_dir(folders) 
+  #rem_dir(folders) 
   return metadata_info
