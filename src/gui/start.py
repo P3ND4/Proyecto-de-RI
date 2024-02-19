@@ -1,6 +1,8 @@
 import tkinter as tk
+from tkinter import ttk
 import os
 import sys
+from Utils import Meta_to_str as MtS
 sys.path.append('src/code')  # Agrega la carpeta padre al path
 
 from recomendations import recomend # Importa la función específica desde el archivo padre
@@ -28,17 +30,28 @@ def mostrar_seleccion():
     seleccion = []
     for i, var in enumerate(vars):
         if var.get() == 1:
-            seleccion.append(opciones[i])
-    #print("Elementos seleccionados:", seleccion)
+            seleccion.append(archivos_epub[i])
+    
+    if len(seleccion) == 0 :
+        abrir_ventana_emergente("Lee un poco y culturizate sobrino")
+        return
+    
+    if len(seleccion) == len(archivos_epub):
+        abrir_ventana_emergente("Que mas quieres que te recomiende si ya lo leiste todo?")
+        return
+    
     recomended = recomend(seleccion)
-    print(recomended)
     for wid in ventana.winfo_children():
         wid.destroy()
-    new_canvas = tk.Canvas(ventana)
+
+    new_label = tk.Label(ventana, text="Te recomiendo estos libros", font=("Arial", 20, "bold"), bg=color_crema)
+    new_label.pack(side=tk.TOP, fill=tk.X)
+
+    new_canvas = tk.Canvas(ventana, bg= color_crema)
     new_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     # Crear un widget Text dentro del Canvas
-    text_widget = tk.Text(new_canvas)
+    text_widget = tk.Text(new_canvas, bg=color_crema)
     text_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     # Crear un widget Scrollbar y asociarlo con el Text
@@ -50,21 +63,38 @@ def mostrar_seleccion():
 
     # Insertar texto de ejemplo en el Text
     n = 1
-    for r in recomended:
-        a = f'{recomended[r]}'[1:-1]
-        text_widget.insert(tk.END, f" {n} -> {a}\n")
+    for r in MtS(recomended):
+        text_widget.insert(tk.END, f" {n} -> {r}\n")
         n+=1
 
 
-    
+
+def abrir_ventana_emergente(msg):
+    # Crear la ventana emergente
+    ventana_emergente = tk.Toplevel(ventana)
+    ventana_emergente.title("Warning!!!")
+
+    # Contenido de la ventana emergente
+    label = tk.Label(ventana_emergente, text=msg)
+    label.pack(padx=20, pady=20)
+
+    # Hacer la ventana emergente modal
+    ventana_emergente.grab_set()
+    ventana.wait_window(ventana_emergente)
 
 # Crear una instancia de la clase Tk, que representa la ventana principal de la aplicación
 ventana = tk.Tk()
+ventana.title("Recomendador de libros")
+color_crema = "#FFF8E7"
+ventana.configure(bg=color_crema)
 
 ventana.geometry("1240x720")
 
+label = tk.Label(ventana, text="Que libros has leido?", font=("Arial", 20, "bold"), bg=color_crema)
+label.pack(side=tk.TOP, fill=tk.X)
+
 # Crear un Canvas para contener los Checkbuttons con Scrollbar
-canvas = tk.Canvas(ventana)
+canvas = tk.Canvas(ventana, bg=color_crema)
 canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
 # Añadir un Scrollbar para controlar el desplazamiento del Canvas
@@ -75,11 +105,11 @@ scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 canvas.configure(yscrollcommand=scrollbar.set)
 
 # Crear un Frame dentro del Canvas para contener los Checkbuttons
-frame = tk.Frame(canvas)
+frame = tk.Frame(canvas, bg=color_crema)
 canvas.create_window((0, 0), window=frame, anchor=tk.NW)
 
 # Definir opciones
-opciones =  archivos_epub #["Opción 1", "Opción 2", "Opción 3", "Opción 4"]
+opciones = MtS(meta)    #archivos_epub #["Opción 1", "Opción 2", "Opción 3", "Opción 4"]
 
 # Crear variables para controlar el estado de los Checkbuttons
 vars = []
@@ -88,8 +118,8 @@ for _ in opciones:
     vars.append(var)
 
 # Crear Checkbuttons para cada opción dentro del Frame
-for i, opcion in enumerate(meta_info):
-    checkbox = tk.Checkbutton(frame, text=opcion, variable=vars[i])
+for i, opcion in enumerate(opciones):
+    checkbox = tk.Checkbutton(frame, text=opcion, bg=color_crema, variable=vars[i])
     checkbox.pack(anchor=tk.W)
 
 # Configurar el tamaño del Canvas y el Frame
