@@ -6,14 +6,14 @@ import os
 from utils import elements_sort_dict
 
 #devuelve las recomendaciones con sus metadatas
-def recomend(epubs: list) -> dict:
-  books_read = extract_metadata(epubs, ['genres'])
-  return extract_metadata(books_recomended(books_read), ['title', 'creator', 'genres', 'date'])
+def recomend(epubs: dict) -> dict:
+  books_read = extract_metadata(list(epubs.keys()), ['genres'])
+  return extract_metadata(books_recomended(books_read, epubs), ['title', 'creator', 'genres', 'date'])
   
 #puntuacion de los libros que no ha leido el usuario
-def books_recomended(books_read: dict) -> list:
+def books_recomended(books_read: dict, books_cal: dict) -> list:
   data_unread = extract_metadata(books_unread(books_read), ['title', 'genres'])
-  user_preferences = user_score(books_read)
+  user_preferences = user_score(books_read, books_cal)
   result = {}
   
   #iniciar todos los libros con 0
@@ -38,15 +38,15 @@ def books_unread(books_read: dict) -> list:
   return result
 
 #preferencia del usuario
-def user_score(books_read: dict) -> dict:
+def user_score(books_read: dict, books_cal: dict) -> dict:
   result = {}
   
-  for element in books_read.values():
-    for genre in element['genres'].split(','):
+  for element in books_read.keys():
+    for genre in books_read[element]['genres'].split(','):
       try:
-        result[genre] += 1
+        result[genre] += books_cal[f'data/{element}.epub']
       except:
-        result[genre] = 1
+        result[genre] = books_cal[f'data/{element}.epub']
   
   return result
 

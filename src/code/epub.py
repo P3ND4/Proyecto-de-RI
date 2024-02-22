@@ -41,24 +41,24 @@ def extract_metadata(epubs: list, tags: list) -> dict:
     metadata_info: dict = {}
     
     for epub in epubs:
-      dir = f"{epub.replace('.epub', '')}/OEBPS/content.opf"
       metadata_info[parse_epub(epub)] = {}
-      i = 0
       
-      with open(dir, 'r') as f:
-        metadata_stage = False
+      for tag in tags:
+        dir = f"{epub.replace('.epub', '')}/OEBPS/content.opf"
         
-        for line in f.readlines():
-          if metadata_stage:
-            if f'dc:{tags[i]}' in line:
-              metadata_info[parse_epub(epub)][tags[i]] = line.split('>')[1].split('<')[0]
-              i += 1 
-              
-              if i == len(tags):
+        with open(dir, 'r') as f:
+          metadata_stage = False
+
+          for line in f.readlines():
+            if metadata_stage:
+              if f'dc:{tag}' in line:
+                metadata_info[parse_epub(epub)][tag] = line.split('>')[1].split('<')[0]
                 break
-              
-          if 'metadata' in line:
-            metadata_stage = True
-      
+
+            if 'metadata' in line:
+              metadata_stage = True
+
   #rem_dir(folders) 
   return metadata_info
+
+#print(extract_metadata(['data/epub1.epub','data/epub2.epub','data/epub3.epub','data/epub4.epub','data/epub5.epub','data/epub6.epub'], ['title', 'creator', 'genres']))
