@@ -7,9 +7,10 @@
 ## Modelo Usado:
 -Sistema de Recomendacion basado en contenido
 ## Como ejecutar:
-1-Abrir la consola en la cartpeta principal y escrivir en el bash:
-#### ./startup.md
-
+1-Abrir la consola en la cartpeta principal y escribir:
+```bash
+./startup.md
+```
 2-Abrira una ventana con los libros disponibles en la carpeta data, asi que deberas marcar los libros leidos y calificarlos.
 
 3-Luego abre la ventana de libros sugeridos con los libros que nuestro modelo determine que puedieran gustarte.
