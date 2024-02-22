@@ -32,7 +32,7 @@ def books_unread(books_read: dict) -> list:
   result = []
   
   for file in os.listdir('data'):
-    if file.replace('.epub', '') not in books_read.keys():
+    if '.epub' in file and file.replace('.epub', '') not in books_read.keys():
       result.append(f'data/{file}')
   
   return result
@@ -50,3 +50,4 @@ def user_score(books_read: dict, books_cal: dict) -> dict:
   
   return result
 
+#print(len(recomend({'data/epub1.epub': 5})))

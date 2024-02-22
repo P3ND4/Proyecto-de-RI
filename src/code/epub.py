@@ -61,4 +61,4 @@ def extract_metadata(epubs: list, tags: list) -> dict:
   #rem_dir(folders) 
   return metadata_info
 
-#print(extract_metadata(['data/epub1.epub','data/epub2.epub','data/epub3.epub','data/epub4.epub','data/epub5.epub','data/epub6.epub'], ['title', 'creator', 'genres']))
+#print(extract_metadata(['data/epub1.epub','data/epub2.epub','data/epub3.epub','data/epub4.epub','data/epub5.epub','data/epub6.epub'], ['title', 'genres']))
