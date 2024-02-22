@@ -6,14 +6,14 @@ import os
 from utils import elements_sort_dict
 
 #devuelve las recomendaciones con sus metadatas
-def recomend(epubs: list) -> dict:
-  books_read = extract_metadata(epubs, ['genres'])
-  return extract_metadata(books_recomended(books_read), ['title', 'creator', 'genres', 'date'])
+def recomend(epubs: dict) -> dict:
+  books_read = extract_metadata(list(epubs.keys()), ['genres', 'creator'])
+  return extract_metadata(books_recomended(books_read, epubs), ['title', 'creator', 'genres', 'date'])
   
 #puntuacion de los libros que no ha leido el usuario
-def books_recomended(books_read: dict) -> list:
-  data_unread = extract_metadata(books_unread(books_read), ['title', 'genres'])
-  user_preferences = user_score(books_read)
+def books_recomended(books_read: dict, books_cal: dict) -> list:
+  data_unread = extract_metadata(books_unread(books_read), ['title', 'genres', 'creator'])
+  user_preferences = user_score(books_read, books_cal)
   result = {}
   
   #iniciar todos los libros con 0
@@ -24,6 +24,9 @@ def books_recomended(books_read: dict) -> list:
     for genre in data_unread[key]['genres'].split(','):
       if genre in user_preferences.keys():
           result[f'data/{key}.epub'] += user_preferences[genre]
+    
+    if data_unread[key]['creator'] in user_preferences.keys():
+      result[f'data/{key}.epub'] += user_preferences[data_unread[key]['creator']]
   
   return list(elements_sort_dict(result).keys())
 
@@ -32,21 +35,30 @@ def books_unread(books_read: dict) -> list:
   result = []
   
   for file in os.listdir('data'):
-    if file.replace('.epub', '') not in books_read.keys():
+    if '.epub' in file and file.replace('.epub', '') not in books_read.keys():
       result.append(f'data/{file}')
   
   return result
 
 #preferencia del usuario
-def user_score(books_read: dict) -> dict:
+def user_score(books_read: dict, books_cal: dict) -> dict:
   result = {}
   
-  for element in books_read.values():
-    for genre in element['genres'].split(','):
+  for element in books_read.keys():
+    for genre in books_read[element]['genres'].split(','):
       try:
-        result[genre] += 1
+        result[genre] += books_cal[f'data/{element}.epub']
       except:
-        result[genre] = 1
+        result[genre] = books_cal[f'data/{element}.epub']
+    
+    #agregar al autor al perfil del usuario
+    autor = books_read[element]['creator']
+    
+    try:
+      result[autor] += books_cal[f'data/{element}.epub']
+    except:
+      result[autor] = books_cal[f'data/{element}.epub']
   
   return result
 
+#print(recomend({'data/epub1.epub': 5, 'data/epub5.epub': 5, 'data/epub9.epub': 4, 'data/epub2.epub': 1, 'data/epub3.epub': 8}))

@@ -12,7 +12,7 @@ def rem_dir(dir: list):
       shutil.rmtree(d)
       print('Succesful delete')
     
-#ordenar un dicionario por sus valores en orden descendente y devuelve hasta los 10  primeros elementos 
+#ordenar un dicionario por sus valores en orden descendente y devuelve hasta los 8  primeros elementos 
 def elements_sort_dict(dict: dict) -> dict:
   result = {}
   sort = {}
@@ -27,7 +27,7 @@ def elements_sort_dict(dict: dict) -> dict:
   
   #toma los 10 primeros elementos
   for element in sort.keys():
-    if i < 10 and i < len(sort):
+    if i < 8 and i < len(sort):
         result[element] = sort[element]
         i +=1 
     
