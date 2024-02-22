@@ -7,7 +7,8 @@
 ## Modelo Usado:
 -Sistema de Recomendacion basado en contenido
 ## Como ejecutar:
-1-Doble clic en el archivo startup.
+1-Abrir la consola en la cartpeta principal y escrivir en el bash:
+#### ./startup.md
 
 2-Abrira una ventana con los libros disponibles en la carpeta data, asi que deberas marcar los libros leidos y calificarlos.
 
@@ -21,3 +22,6 @@ https://www.statdeveloper.com/recomendaciones-basado-en-contenido-en-python
 
 ## Insuficiencias de la implementacion:
 La obtencion de la metadata se realiza haciendo una busqueda interna en los documentos .epub en la seccion que especifica la metadata, por lo que nuestra implementacion se ve propensa a dar resultados erroneos debido a metadata inexistente o falsa. Una solucion podria basarse en asegurar que la metadata este correcta usando alguna api externa para accader a la informacion faltante o comprobar que esta sea correcta
+
+## Fuentes de Datos:
+Documentos .epub escogidos al azar.
