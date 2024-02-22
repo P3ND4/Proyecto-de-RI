@@ -42,7 +42,7 @@ def next():
     # Configurar el Text para usar la Scrollbar
     text_widget.config(yscrollcommand=new_scrollbar.set)
 
-    # Insertar texto de ejemplo en el Text
+    # Insertar Libros recomendados
     n = 1
     for r in MtS(recomended):
         text_widget.insert(tk.END, f" {n} -> {r}\n")
