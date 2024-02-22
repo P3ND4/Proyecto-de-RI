@@ -34,4 +34,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['/home/p3nd4/Documents/GitHub/Proyecto-de-RI/icon/Books_40673.ico'],
 )

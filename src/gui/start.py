@@ -1,36 +1,17 @@
 import tkinter as tk
-from tkinter import ttk
 import os
 import sys
 from Utils import Meta_to_str as MtS
-sys.path.append('src/code')  # Agrega la carpeta padre al path
-
-from recomendations import recomend # Importa la función específica desde el archivo padre
+sys.path.append('src/code')  
+from recomendations import recomend 
 from epub import extract_metadata
 
-# Obtener la lista de archivos en la carpeta
-archivos = os.listdir('data')
 
-# Filtrar los archivos que terminan con .epub
-archivos_epub = [archivo for archivo in archivos if archivo.endswith('.epub')]
-
-for i in range (0, len(archivos_epub)):
-    archivos_epub[i] = f'data/{archivos_epub[i]}'
-
-meta = extract_metadata(archivos_epub, ['title', 'creator', 'genres'])
-
-meta_info = []
-for m in meta:
-    a = f'{meta[m]}'
-    meta_info.append(a[1:-1])
-
-print(meta_info)
-
-def mostrar_seleccion():
+def next():
     #seleccion = []
     for i, var in enumerate(vars):
         if var.get() == 1:
-            calificaciones[archivos_epub[i]] = calif[i].get()
+            calificaciones[archivos_epub[i]] = points[i].get()
     
     if len(calificaciones) == 0 :
         abrir_ventana_emergente("Lee un poco y culturizate sobrino")
@@ -68,7 +49,6 @@ def mostrar_seleccion():
         n+=1
 
 
-
 def abrir_ventana_emergente(msg):
     # Crear la ventana emergente
     ventana_emergente = tk.Toplevel(ventana)
@@ -82,18 +62,29 @@ def abrir_ventana_emergente(msg):
     ventana_emergente.grab_set()
     ventana.wait_window(ventana_emergente)
 
-# Crear una instancia de la clase Tk, que representa la ventana principal de la aplicación
+
+
+# Obtener la lista de archivos en la carpeta
+archivos = os.listdir('data')
+# Filtrar los archivos que terminan con .epub
+archivos_epub = [archivo for archivo in archivos if archivo.endswith('.epub')]
+# Completa las direcciones
+for i in range (0, len(archivos_epub)):
+    archivos_epub[i] = f'data/{archivos_epub[i]}'
+# Extrae la metadata de todos los libros
+meta = extract_metadata(archivos_epub, ['title', 'creator', 'genres'])
+
+# Crea el diccionario que usaremos para guardar la calificacion de cada libro
 calificaciones = {}
 
-
+# Crear una instancia de la clase Tk, que representa la ventana principal de la aplicación
 ventana = tk.Tk()
 ventana.title("Recomendador de libros")
 color_crema = "#FFF8E7"
 
 ventana.configure(bg=color_crema)
-
 ventana.geometry("1240x720")
-
+# Encabezado
 label = tk.Label(ventana, text="Que libros has leido?", font=("Arial", 20, "bold"), bg=color_crema)
 label.pack(side=tk.TOP, fill=tk.X)
 
@@ -113,18 +104,19 @@ frame = tk.Frame(canvas, bg=color_crema)
 canvas.create_window((0, 0), window=frame, anchor=tk.NW)
 
 # Definir opciones
-opciones = MtS(meta)    #archivos_epub #["Opción 1", "Opción 2", "Opción 3", "Opción 4"]
+opciones = MtS(meta)
 
 # Crear variables para controlar el estado de los Checkbuttons
 vars = []
 for _ in opciones:
     var = tk.IntVar()
     vars.append(var)
-
+# Arreglo para guardar las calificaciones del Scale
+points = []
 # Crear Checkbuttons para cada opción dentro del Frame
 for i, opcion in enumerate(opciones):
     calif = tk.IntVar()
-
+    points.append(calif)
     checkbox = tk.Checkbutton(frame, text=opcion, bg=color_crema, variable=vars[i])
     checkbox.pack(anchor=tk.W)
 
@@ -134,12 +126,12 @@ for i, opcion in enumerate(opciones):
     rating_scale = tk.Scale(frame, from_=1, to=10, orient="horizontal", variable=calif,bg=color_crema)
     rating_scale.pack(anchor="w")
 
-# Configurar el tamaño del Canvas y el Frame
+
 frame.update_idletasks()  # Actualizar el Frame para obtener su tamaño
 canvas.config(scrollregion=canvas.bbox("all"))  # Configurar el tamaño del Canvas
 
 # Botón para mostrar selección
-boton_siguiente = tk.Button(ventana, text="Siguiente", command=mostrar_seleccion)
+boton_siguiente = tk.Button(ventana, text="Siguiente", command=next)
 boton_siguiente.pack()
 
 # Iniciar el bucle principal de la aplicación
