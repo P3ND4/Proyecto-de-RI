@@ -636,7 +636,7 @@
  [],
  False,
  False,
- 1708610049,
+ 1708632666,
  [('run',
    '/home/p3nd4/.local/lib/python3.10/site-packages/PyInstaller/bootloader/Linux-64bit-intel/run',
    'EXECUTABLE')],
