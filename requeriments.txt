@@ -8,3 +8,6 @@ LIBRERIAS USADAS EN EL PROYECTO:
 .import shutil (borrar las carpetas al cerrar el proyecto y dejar el corpus solo con los .epub)
 
 3-gui libraries (Josea Carla pon aqui tus libreias zorra)
+
+4-Guia para la implementacion del algoritmo (One Hot Encoded)
+https://www.statdeveloper.com/recomendaciones-basado-en-contenido-en-python
