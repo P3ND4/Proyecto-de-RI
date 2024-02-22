@@ -27,20 +27,20 @@ for m in meta:
 print(meta_info)
 
 def mostrar_seleccion():
-    seleccion = []
+    #seleccion = []
     for i, var in enumerate(vars):
         if var.get() == 1:
-            seleccion.append(archivos_epub[i])
+            calificaciones[archivos_epub[i]] = calif[i].get()
     
-    if len(seleccion) == 0 :
+    if len(calificaciones) == 0 :
         abrir_ventana_emergente("Lee un poco y culturizate sobrino")
         return
     
-    if len(seleccion) == len(archivos_epub):
+    if len(calificaciones) == len(archivos_epub):
         abrir_ventana_emergente("Que mas quieres que te recomiende si ya lo leiste todo?")
         return
     
-    recomended = recomend(seleccion)
+    recomended = recomend(calificaciones)
     for wid in ventana.winfo_children():
         wid.destroy()
 
@@ -83,9 +83,13 @@ def abrir_ventana_emergente(msg):
     ventana.wait_window(ventana_emergente)
 
 # Crear una instancia de la clase Tk, que representa la ventana principal de la aplicación
+calificaciones = {}
+
+
 ventana = tk.Tk()
 ventana.title("Recomendador de libros")
 color_crema = "#FFF8E7"
+
 ventana.configure(bg=color_crema)
 
 ventana.geometry("1240x720")
@@ -119,8 +123,16 @@ for _ in opciones:
 
 # Crear Checkbuttons para cada opción dentro del Frame
 for i, opcion in enumerate(opciones):
+    calif = tk.IntVar()
+
     checkbox = tk.Checkbutton(frame, text=opcion, bg=color_crema, variable=vars[i])
     checkbox.pack(anchor=tk.W)
+
+    rating_label = tk.Label(frame, text="Calificación:", bg=color_crema)
+    rating_label.pack(anchor="w")
+
+    rating_scale = tk.Scale(frame, from_=1, to=10, orient="horizontal", variable=calif,bg=color_crema)
+    rating_scale.pack(anchor="w")
 
 # Configurar el tamaño del Canvas y el Frame
 frame.update_idletasks()  # Actualizar el Frame para obtener su tamaño
